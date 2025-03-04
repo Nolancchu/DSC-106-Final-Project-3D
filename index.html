@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Project</title>
+    <title>DSC 106 - Final Project | Team 3D</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
     <div class="container">
+        <!-- Screen 1: Interactive Visualization -->
         <section class="screen" id="screen1">
             <div class="title-area">
-                <h1>My Project Title</h1>
+                <h1>How to Get Good Grades (Biologically)</h1>
             </div>
             <div class="content-container">
                 <div class="character-area">
@@ -21,18 +22,38 @@
                 </div>
                 <div class="vertical-divider"></div>
                 <div class="content-area">
-                    <h2>Data Visualizations</h2>
-                    <div class="visualization" id="viz1">
-                        <img src="S10M1HR.png" alt="Your Image">
+                    <h2>Examining Heart Rate Trends</h2>
+                    <div class="controls">
+                        <label for="student-select">Select Student:</label>
+                        <select id="student-select">
+                            <option value="S1">S1</option>
+                            <option value="S2">S2</option>
+                            <option value="S3">S3</option>
+                            <option value="S4">S4</option>
+                            <option value="S5">S5</option>
+                            <option value="S6">S6</option>
+                            <option value="S7">S7</option>
+                            <option value="S8">S8</option>
+                            <option value="S9">S9</option>
+                            <option value="S10">S10</option>
+                        </select>
+                        <label for="exam-select">Select Exam:</label>
+                        <select id="exam-select">
+                            <option value="Midterm 1">Midterm 1</option>
+                            <option value="Midterm 2">Midterm 2</option>
+                            <option value="Final">Final</option>
+                        </select>
                     </div>
-                    <p class="description">Sample graphs and charts will appear here...</p>
+                    <div class="visualization" id="viz1"></div>
+                    <p class="description">Interact with the chart to see how each student's heart rate varied over time on different exams!</p>
                 </div>
             </div>
         </section>
 
+        <!-- Screen 2: The Good Student -->
         <section class="screen" id="screen2">
             <div class="title-area">
-                <h1>Research Question</h1>
+                <h1>The Good Student</h1>
             </div>
             <div class="content-container">
                 <div class="character-area">
@@ -41,19 +62,14 @@
  / \</pre>
                 </div>
                 <div class="vertical-divider"></div>
-                <div class="content-area">
-                    <h2>Exploring Patterns</h2>
-                    <div class="visualization" id="viz2">
-                        <img src="MHRvsGrade.png" alt="Your Image">
-                    </div>
-                    <p class="description">Here we examine the relationships between key variables...</p>
-                </div>
+                <div class="content-area"></div>
             </div>
         </section>
 
+        <!-- Screen 3: The Bad Student -->
         <section class="screen" id="screen3">
             <div class="title-area">
-                <h1>Methodology</h1>
+                <h1>The Bad Student</h1>
             </div>
             <div class="content-container">
                 <div class="character-area">
@@ -62,17 +78,14 @@
  / \</pre>
                 </div>
                 <div class="vertical-divider"></div>
-                <div class="content-area">
-                    <h2>Data Analysis Approach</h2>
-                    <div class="visualization" id="viz3"></div>
-                    <p class="description">Our analytical framework consists of several steps...</p>
-                </div>
+                <div class="content-area"></div>
             </div>
         </section>
 
+        <!-- Screen 4: The Differences -->
         <section class="screen" id="screen4">
             <div class="title-area">
-                <h1>Key Findings</h1>
+                <h1>Good or Bad Student?</h1>
             </div>
             <div class="content-container">
                 <div class="character-area">
@@ -81,17 +94,14 @@
  / \</pre>
                 </div>
                 <div class="vertical-divider"></div>
-                <div class="content-area">
-                    <h2>Results Overview</h2>
-                    <div class="visualization" id="viz4"></div>
-                    <p class="description">The analysis revealed several significant patterns...</p>
-                </div>
+                <div class="content-area"></div>
             </div>
         </section>
 
+        <!-- Screen 5: Write-Up -->
         <section class="screen" id="screen5">
             <div class="title-area">
-                <h1>Conclusions & Write-up</h1>
+                <h1>Write-Up</h1>
             </div>
             <div class="content-container">
                 <div class="character-area">
@@ -101,7 +111,6 @@
                 </div>
                 <div class="vertical-divider"></div>
                 <div class="content-area">
-                    <div class="visualization" id="viz5"></div>
                     <p class="description"><b>What have you done so far? </b><br>
                     So far, our team has made fairly great progress. We spent about two to three hours preprocessing the data, which included data cleaning/organization, in addition to performing some exploratory data analysis. During our EDA, we explored trends like heart rate, temperature, and BVP over time for different students over various exams. Afterwards, based on the conclusions of our EDA, we came up with some visualization ideas. We ended up deciding on a storyboard-style visualization in which the user scrolls through different slides to learn about which factors lead to good/bad grades; this story will be told using specific students in the dataset who performed poorly/well. We created a basic template for the storyboard, and added the ability for the user to scroll through the slides. <br>
                     <br><b>What will be the most challenging of your project to design, and why?</b> <br>

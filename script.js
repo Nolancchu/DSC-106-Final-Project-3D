@@ -164,44 +164,23 @@ document.addEventListener('DOMContentLoaded', function() {
             
         // Visualization 5: Grouped bar chart
         const viz5 = d3.select("#viz5")
-            .append("svg")
-            .attr("width", "100%")
-            .attr("height", "100%");
+
             
         const viz5Width = document.getElementById('viz5').clientWidth;
         const viz5Height = document.getElementById('viz5').clientHeight;
             
         const data5 = [
-            {group: "A", values: [20, 30]},
-            {group: "B", values: [35, 25]},
-            {group: "C", values: [15, 40]},
-            {group: "D", values: [25, 35]}
+            {values: [20, 30]},
+            {values: [35, 25]},
+            {values: [15, 40]},
+            {values: [25, 35]}
         ];
         
         const barWidth = viz5Width / (data5.length * 3);
         const barSpacing = barWidth / 2;
 
         data5.forEach((d, i) => {
-            viz5.append("rect")
-                .attr("x", i * (barWidth * 3) + barWidth)
-                .attr("y", viz5Height - (d.values[0] * viz5Height / 50))
-                .attr("width", barWidth)
-                .attr("height", d.values[0] * viz5Height / 50)
-                .attr("fill", "#3498db");
-                
-            viz5.append("rect")
-                .attr("x", i * (barWidth * 3) + barWidth * 2 + barSpacing)
-                .attr("y", viz5Height - (d.values[1] * viz5Height / 50))
-                .attr("width", barWidth)
-                .attr("height", d.values[1] * viz5Height / 50)
-                .attr("fill", "#e74c3c");
-                
-            viz5.append("text")
-                .text(d.group)
-                .attr("x", i * (barWidth * 3) + barWidth * 2)
-                .attr("y", viz5Height - 10)
-                .attr("text-anchor", "middle")
-                .attr("fill", "#333");
+            
         });
     }
 

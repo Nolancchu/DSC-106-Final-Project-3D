@@ -93,53 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function initializeVisualizations() {
         // Sample D3 visualizations - you can replace these with your actual visualizations
         
-        // Visualization 1: Simple bar chart
-        const viz1 = d3.select("#viz1")
-            .append("svg")
-            .attr("width", "100%")
-            .attr("height", "100%");
-            
-        const viz1Width = document.getElementById('viz1').clientWidth;
-        const viz1Height = document.getElementById('viz1').clientHeight;
-            
-        const data1 = [5, 10, 15, 20, 25];
-        
-        viz1.selectAll("rect")
-            .data(data1)
-            .enter()
-            .append("rect")
-            .attr("x", (d, i) => i * (viz1Width / data1.length) + viz1Width / (data1.length * 5))
-            .attr("y", d => viz1Height - (d * viz1Height / 30))
-            .attr("width", viz1Width / data1.length - 20)
-            .attr("height", d => d * viz1Height / 30)
-            .attr("fill", "#3498db");
-            
-        // Visualization 2: Scatter plot
-        const viz2 = d3.select("#viz2")
-            .append("svg")
-            .attr("width", "100%")
-            .attr("height", "100%");
-            
-        const viz2Width = document.getElementById('viz2').clientWidth;
-        const viz2Height = document.getElementById('viz2').clientHeight;
-            
-        const data2 = [
-            {x: 0.1, y: 0.3, r: 10},
-            {x: 0.3, y: 0.5, r: 15},
-            {x: 0.5, y: 0.4, r: 20},
-            {x: 0.7, y: 0.7, r: 25},
-            {x: 0.9, y: 0.5, r: 15}
-        ];
-        
-        viz2.selectAll("circle")
-            .data(data2)
-            .enter()
-            .append("circle")
-            .attr("cx", d => d.x * viz2Width)
-            .attr("cy", d => d.y * viz2Height)
-            .attr("r", d => d.r)
-            .attr("fill", "#e74c3c");
-            
+  
         // Visualization 3: Line chart
         const viz3 = d3.select("#viz3")
             .append("svg")

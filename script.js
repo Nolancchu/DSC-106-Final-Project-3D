@@ -61,39 +61,42 @@ document.addEventListener('DOMContentLoaded', function() {
                 d.heart_rate_bpm = +d.heart_rate_bpm;
             });
 
-            // Set up the initial chart
-            updateChart(data, 'S1', 'Midterm 1');
+            // Set up the initial chart for Screen 1
+            updateChart(data, 'S1', 'Midterm 1', '#viz1');
 
-            // Add event listeners to the dropdowns
+            // Set up the chart for Screen 2 (Student 8, Midterm 1)
+            updateChart(data, 'S8', 'Midterm 1', '#viz2');
+
+            // Add event listeners to the dropdowns for Screen 1
             d3.select("#student-select").on("change", function() {
                 const selectedStudent = this.value;
                 const selectedExam = d3.select("#exam-select").node().value;
-                updateChart(data, selectedStudent, selectedExam);
+                updateChart(data, selectedStudent, selectedExam, '#viz1');
             });
 
             d3.select("#exam-select").on("change", function() {
                 const selectedExam = this.value;
                 const selectedStudent = d3.select("#student-select").node().value;
-                updateChart(data, selectedStudent, selectedExam);
+                updateChart(data, selectedStudent, selectedExam, '#viz1');
             });
         }).catch(error => {
             console.error("Error loading the CSV data:", error);
         });
     }
 
-    function updateChart(data, student, exam) {
+    function updateChart(data, student, exam, targetId) {
         // Filter the data for the selected student and exam
         const filteredData = data.filter(d => d.student_id === student && d.exam_name === exam);
 
         // Clear the previous chart
-        d3.select("#viz1").selectAll("*").remove();
+        d3.select(targetId).selectAll("*").remove();
 
         // Set up the SVG dimensions
         const margin = { top: 50, right: 30, bottom: 50, left: 50 };
-        const width = document.getElementById('viz1').clientWidth - margin.left - margin.right;
+        const width = document.querySelector(targetId).clientWidth - margin.left - margin.right;
         const height = 400 - margin.top - margin.bottom;
 
-        const svg = d3.select("#viz1")
+        const svg = d3.select(targetId)
             .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
@@ -132,23 +135,34 @@ document.addEventListener('DOMContentLoaded', function() {
             .text("Heart Rate (BPM)");
 
         // Add the line
+        const line = d3.line()
+            .x(d => xScale(d.unix))
+            .y(d => yScale(d.heart_rate_bpm));
+
         svg.append("path")
             .datum(filteredData)
             .attr("fill", "none")
             .attr("stroke", "steelblue")
-            .attr("stroke-width", 1)
-            .attr("d", d3.line()
-                .x(d => xScale(d.unix))
-                .y(d => yScale(d.heart_rate_bpm))
-            );
+            .attr("stroke-width", 1) // Thin line
+            .attr("d", line);
 
         // Add the title
-        svg.append("text")
-            .attr("x", width / 2)
-            .attr("y", -10)
-            .attr("text-anchor", "middle")
-            .style("font-size", "18px")
-            .style("font-weight", "bold")
-            .text(`Heart Rate Over Time for ${student} for ${exam}`);
+        if (targetId === '#viz2') {
+            svg.append("text")
+                .attr("x", width / 2)
+                .attr("y", -10)
+                .attr("text-anchor", "middle")
+                .style("font-size", "18px")
+                .style("font-weight", "bold")
+                .text(`Heart Rate Over Time for Bartholomew on Midterm 1`);
+        } else {
+            svg.append("text")
+                .attr("x", width / 2)
+                .attr("y", -10)
+                .attr("text-anchor", "middle")
+                .style("font-size", "18px")
+                .style("font-weight", "bold")
+                .text(`Heart Rate Over Time for ${student} for ${exam}`);
+        }
     }
 });

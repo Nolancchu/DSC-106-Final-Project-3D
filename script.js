@@ -131,8 +131,12 @@ d3.csv("final_data.csv").then(data => {
     // Filter data up to the current time
     const filteredData = studentData.filter(d => d.unix <= currentTime);
 
-    // Update the path
-    heartRatePath.attr("d", heartRateLine(filteredData));
+    // Update the path with a smooth transition
+    heartRatePath
+      .datum(filteredData)
+      .transition()
+      .duration(100) // Smooth transition over 100ms
+      .attr("d", heartRateLine);
 
     // Update real-time information
     const currentData = filteredData[filteredData.length - 1];
@@ -205,24 +209,27 @@ d3.csv("final_data.csv").then(data => {
     const startTime = 0;
     const endTime = d3.max(examData, d => d.unix);
 
-    animationTimer = d3.interval(() => {
-      currentTime += 200; // Increment time by 200 Unix time units per frame
-      if (currentTime >= endTime) {
+    // Use D3 transition for smooth animation
+    d3.transition()
+      .duration(endTime * 0.5) // Adjust duration for smoothness (10ms per unit time)
+      .ease(d3.easeLinear)
+      .tween("currentTime", () => {
+        return t => {
+          currentTime = t * endTime; // Update currentTime based on progress
+          updateCharts(currentTime);
+        };
+      })
+      .on("end", () => {
         pauseAnimation();
         playButton.text("Restart");
-      } else {
-        updateCharts(currentTime);
-      }
-    }, 100); // Update every 100ms
+      });
   }
 
   // Function to pause animation
   function pauseAnimation() {
     isPlaying = false;
     playButton.text("Play");
-    if (animationTimer) {
-      animationTimer.stop();
-    }
+    svg.interrupt(); // Stop all transitions
   }
 
   // Function to reset charts

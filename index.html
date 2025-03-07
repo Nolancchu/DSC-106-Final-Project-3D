@@ -1,131 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DSC 106 - Final Project | Team 3D</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-Time Stress Simulator</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Screen 1: Interactive Visualization -->
-        <section class="screen" id="screen1">
-            <div class="title-area">
-                <h1>How to Get Good Grades (Biologically)</h1>
-            </div>
-            <div class="content-container">
-                <div class="character-area">
-                    <pre class="stick-figure">  o
- /|\
- / \</pre>
-                </div>
-                <div class="vertical-divider"></div>
-                <div class="content-area">
-                    <h2>Examining Heart Rate Trends</h2>
-                    <div class="controls">
-                        <label for="student-select">Select Student:</label>
-                        <select id="student-select">
-                            <option value="S1">S1</option>
-                            <option value="S2">S2</option>
-                            <option value="S3">S3</option>
-                            <option value="S4">S4</option>
-                            <option value="S5">S5</option>
-                            <option value="S6">S6</option>
-                            <option value="S7">S7</option>
-                            <option value="S8">S8</option>
-                            <option value="S9">S9</option>
-                            <option value="S10">S10</option>
-                        </select>
-                        <label for="exam-select">Select Exam:</label>
-                        <select id="exam-select">
-                            <option value="Midterm 1">Midterm 1</option>
-                            <option value="Midterm 2">Midterm 2</option>
-                            <option value="Final">Final</option>
-                        </select>
-                    </div>
-                    <div class="visualization" id="viz1"></div>
-                    <p class="description">Interact with the chart to see how each student's heart rate varied over time on different exams!</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Screen 2: The Good Student -->
-        <section class="screen" id="screen2">
-            <div class="title-area">
-                <h1>The Good Student</h1>
-            </div>
-            <div class="content-container">
-                <div class="character-area">
-                    <img src="happy_person.png" alt="Happy Student" class="student-image">
-                    <p class="student-description">Meet Bartholomew. He's one of the smartest people in his class; he has was the valedictorian of his high school, currently has a 4.0 GPA, and is the founder of a successful consulting company. He loves to take part in Kaggle competitions in his free time, and he only works on LeetCode "Hard" problems to prepare for his next FAANG internship.</p>
-                </div>
-                <div class="vertical-divider"></div>
-                <div class="content-area">
-                    <h2>Bart's Heart - Working hard or hardly working?</h2>
-                    <div class="visualization" id="viz2"></div>
-                    <p class="description">Bartholomew's heart rate started off pretty high at the beginning of the test, at around 160 BPM, but lowered once he realized the exam was relatively easy. His heart rate then hovered around the 110-120 BPM mark for the remainder of the test. He ended up getting an 88, which was the highest in the class!</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Screen 3: The Bad Student -->
-        <section class="screen" id="screen3">
-            <div class="title-area">
-                <h1>The Bad Student</h1>
-            </div>
-            <div class="content-container">
-                <div class="character-area">
-                    <img src="sad_person.png" alt="Sad Student" class="student-image">
-                    <p class="student-description">Meet Tim. He, unfortunately, isn't one of the smartest people in his class; he struggled to graduate from high school, barely got accepted into a university, and is currently on academic probation. He loves gaming so much to the point he prioritizes the hobby over academics; he plays video games for almost 12 hours a day, skips all of his classes, and doesn't like socializing with people.</p>
-                </div>
-                <div class="vertical-divider"></div>
-                <div class="content-area">
-                    <h2>Tim's Heart - Exam = High-Intensity Workout Sesh</h2>
-                    <div class="visualization" id="viz3"></div>
-                    <p class="description">Tim's heart rate started off at about 130 BPM at the beginning of the test, which was lower than Bart's heart rate at same point in the exam. However, Tim's heart rate ended up at a much higher level than Bart's at the end of the test, at about 190 BPM. Tim ended up getting the worst grade in the class.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Screen 4: The Differences -->
-        <section class="screen" id="screen4">
-            <div class="title-area">
-                <h1>Good or Bad Student?</h1>
-            </div>
-            <div class="content-container">
-                <div class="character-area">
-                    <pre class="stick-figure">  o
- /|\
- / \</pre>
-                </div>
-                <div class="vertical-divider"></div>
-                <div class="content-area"></div>
-            </div>
-        </section>
-
-        <!-- Screen 5: Write-Up -->
-        <section class="screen" id="screen5">
-            <div class="title-area">
-                <h1>Write-Up</h1>
-            </div>
-            <div class="content-container">
-                <div class="character-area">
-                    <pre class="stick-figure">  o
- /|\
- / \</pre>
-                </div>
-                <div class="vertical-divider"></div>
-                <div class="content-area">
-                    <p class="description"><b>What have you done so far? </b><br>
-                    So far, our team has made fairly great progress. We spent about two to three hours preprocessing the data, which included data cleaning/organization, in addition to performing some exploratory data analysis. During our EDA, we explored trends like heart rate, temperature, and BVP over time for different students over various exams. Afterwards, based on the conclusions of our EDA, we came up with some visualization ideas. We ended up deciding on a storyboard-style visualization in which the user scrolls through different slides to learn about which factors lead to good/bad grades; this story will be told using specific students in the dataset who performed poorly/well. We created a basic template for the storyboard, and added the ability for the user to scroll through the slides. <br>
-                    <br><b>What will be the most challenging of your project to design, and why?</b> <br>
-                    One of the most challenging aspects of our project will be designing the interactive storyboard in a way that effectively conveys insights while keeping users engaged. Since we are using real students’ data to tell a story, we need to ensure that the transitions between slides feel seamless, and that the visual elements clearly highlight key trends, such as the relationship between physiological signals and exam performance. Another challenge will be optimizing the interactivity – making sure that users can explore different variables (e.g., heart rate, BVP, and grades) without overwhelming them with too much information at once. Finally, balancing aesthetics with clarity will be difficult, as we need to create a visually compelling experience while maintaining readability, and avoiding clutter in our explanations.</p>
-                </div>
-            </div>
-        </section>
+  <h1>Real-Time Stress Simulator: Midterm 1</h1>
+  <div id="controls">
+    <label for="student-select">Select Student:</label>
+    <select id="student-select">
+      <option value="S1">S1</option>
+      <option value="S2">S2</option>
+      <option value="S3">S3</option>
+      <option value="S4">S4</option>
+      <option value="S5">S5</option>
+      <option value="S6">S6</option>
+      <option value="S7">S7</option>
+      <option value="S8">S8</option>
+      <option value="S9">S9</option>
+      <option value="S10">S10</option>
+    </select>
+    <button id="play-button">Play</button>
+  </div>
+  <div id="grade-box"></div>
+  <div id="chart-container">
+    <div id="chart"></div>
+    <div id="avg-diff-box">
+      <div id="avg-diff-beginning">Avg. Diff. Btwn. Actual Heart Rate and Resting Heart Rate: -- BPM</div>
+      <div id="avg-diff-middle">Avg. Diff. Btwn. Actual Heart Rate and Resting Heart Rate: -- BPM</div>
+      <div id="avg-diff-end">Avg. Diff. Btwn. Actual Heart Rate and Resting Heart Rate: -- BPM</div>
     </div>
-    
-    <script src="script.js"></script>
+  </div>
+  <div id="info-box">
+    <div>Unix Time: <span id="unix-time">--</span></div>
+    <div>Heart Rate: <span id="heart-rate">-- BPM</span></div>
+  </div>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

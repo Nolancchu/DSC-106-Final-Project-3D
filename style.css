@@ -73,8 +73,14 @@ body {
     font-size: 16px;
     color: #333;
   }
-
+  
   .average-difference-label {
+    font-size: 14px;
+    font-weight: bold;
+    fill: #333;
+  }
+  
+  .axis-label {
     font-size: 14px;
     font-weight: bold;
     fill: #333;

@@ -79,3 +79,69 @@ body {
     font-weight: bold;
     fill: #333;
   }
+
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    text-align: center;
+}
+
+.heart {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 50px auto;
+    transform: rotate(45deg);
+    background-color: #ff0000;
+    animation: beat 1s infinite alternate;
+}
+
+.heart:before,
+.heart:after {
+    content: '';
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-color: #ff0000;
+    border-radius: 50%;
+}
+
+.heart:before {
+    top: -50px;
+    left: 0;
+}
+
+.heart:after {
+    top: 0;
+    left: -50px;
+}
+
+@keyframes beat {
+    0% {
+        transform: rotate(45deg) scale(0.8);
+    }
+    100% {
+        transform: rotate(45deg) scale(1);
+    }
+}
+
+.controls {
+    margin-top: 30px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+#heartRate {
+    width: 200px;
+    margin: 0 10px;
+}

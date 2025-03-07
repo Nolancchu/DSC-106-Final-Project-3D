@@ -246,28 +246,3 @@ d3.csv("final_data.csv").then(data => {
   // Initialize grade box for the first student
   updateGradeBox();
 });
-
-// Get the heart element and the rate slider
-const heart = document.getElementById('beatingHeart');
-const heartRateSlider = document.getElementById('heartRate');
-const bpmDisplay = document.getElementById('bpmDisplay');
-
-// Function to update the heart beat rate
-function updateHeartRate() {
-    const bpm = heartRateSlider.value;
-    bpmDisplay.textContent = `${bpm} BPM`;
-    
-    // Convert BPM to animation duration in seconds
-    // At 60 BPM, a complete heartbeat takes 1 second
-    // So we calculate: 60/BPM = duration in seconds
-    const beatDuration = 60 / bpm;
-    
-    // Update the animation duration
-    heart.style.animation = `beat ${beatDuration}s infinite alternate`;
-}
-
-// Set initial heart rate
-updateHeartRate();
-
-// Update heart rate when slider changes
-heartRateSlider.addEventListener('input', updateHeartRate);

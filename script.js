@@ -67,6 +67,9 @@ document.addEventListener('DOMContentLoaded', function() {
             // Set up the chart for Screen 2 (Student 8, Midterm 1)
             updateChart(data, 'S8', 'Midterm 1', '#viz2');
 
+            // Set up the chart for Screen 3 (Student 7, Midterm 1)
+            updateChart(data, 'S7', 'Midterm 1', '#viz3');
+
             // Add event listeners to the dropdowns for Screen 1
             d3.select("#student-select").on("change", function() {
                 const selectedStudent = this.value;
@@ -155,6 +158,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 .style("font-size", "18px")
                 .style("font-weight", "bold")
                 .text(`Heart Rate Over Time for Bartholomew on Midterm 1`);
+        } else if (targetId === '#viz3') {
+            svg.append("text")
+                .attr("x", width / 2)
+                .attr("y", -10)
+                .attr("text-anchor", "middle")
+                .style("font-size", "18px")
+                .style("font-weight", "bold")
+                .text(`Heart Rate Over Time for Tim on Midterm 1`);
         } else {
             svg.append("text")
                 .attr("x", width / 2)

@@ -142,19 +142,22 @@ d3.csv("final_data.csv").then(data => {
     }
 
     // Check if the animation reaches 4000 or 8000 Unix times
-    if (currentTime >= 4000 && !document.getElementById("avg-diff-beginning").textContent.includes("--")) {
-      displayAverageDifference(studentData, 0, 4000, "beginning");
+    if (currentTime >= 4000 && !svg.select(".average-difference-beginning").node()) {
+      const xPos = (xScale(0) + xScale(4000)) / 2; // Center between 0 and 4000
+      displayAverageDifference(studentData, 0, 4000, xPos, margin.top - 10, "beginning");
     }
-    if (currentTime >= 8000 && !document.getElementById("avg-diff-middle").textContent.includes("--")) {
-      displayAverageDifference(studentData, 4000, 8000, "middle");
+    if (currentTime >= 8000 && !svg.select(".average-difference-middle").node()) {
+      const xPos = (xScale(4000) + xScale(8000)) / 2; // Center between 4000 and 8000
+      displayAverageDifference(studentData, 4000, 8000, xPos, margin.top - 10, "middle");
     }
-    if (currentTime >= d3.max(studentData, d => d.unix) && !document.getElementById("avg-diff-end").textContent.includes("--")) {
-      displayAverageDifference(studentData, 8000, d3.max(studentData, d => d.unix), "end");
+    if (currentTime >= d3.max(studentData, d => d.unix) && !svg.select(".average-difference-end").node()) {
+      const xPos = (xScale(8000) + xScale(d3.max(studentData, d => d.unix))) / 2; // Center between 8000 and end time
+      displayAverageDifference(studentData, 8000, d3.max(studentData, d => d.unix), xPos, margin.top - 10, "end");
     }
   }
 
   // Function to calculate and display average difference in heart rate
-  function displayAverageDifference(data, startTime, endTime, section) {
+  function displayAverageDifference(data, startTime, endTime, xPos, yPos, section) {
     const sectionData = data.filter(d => d.unix >= startTime && d.unix <= endTime);
     if (sectionData.length === 0) {
       console.log(`No data for ${section} section for student ${selectedStudent}`);
@@ -170,12 +173,12 @@ d3.csv("final_data.csv").then(data => {
     const restingHeartRate = 80; // Middle of the resting heart rate range (60-100 BPM)
     const avgDifference = (avgHeartRate - restingHeartRate).toFixed(2);
 
-    // Update the corresponding HTML element
-    const elementId = `avg-diff-${section}`;
-    const element = document.getElementById(elementId);
-    if (element) {
-      element.textContent = `Avg. Diff. Btwn. Actual Heart Rate and Resting Heart Rate: ${avgDifference} BPM`;
-    }
+    // Display the average difference
+    svg.append("text")
+      .attr("class", `average-difference-label average-difference-${section}`)
+      .attr("x", xPos)
+      .attr("y", yPos)
+      .text(`Avg Diff: ${avgDifference} BPM`);
   }
 
   // Function to update grade box
@@ -230,10 +233,7 @@ d3.csv("final_data.csv").then(data => {
     d3.select("#unix-time").text("--");
     d3.select("#heart-rate").text("-- BPM");
     playButton.text("Play");
-    // Reset average difference text
-    document.getElementById("avg-diff-beginning").textContent = "Avg. Diff. Btwn. Actual Heart Rate and Resting Heart Rate: -- BPM";
-    document.getElementById("avg-diff-middle").textContent = "Avg. Diff. Btwn. Actual Heart Rate and Resting Heart Rate: -- BPM";
-    document.getElementById("avg-diff-end").textContent = "Avg. Diff. Btwn. Actual Heart Rate and Resting Heart Rate: -- BPM";
+    svg.selectAll(".average-difference-label").remove(); // Remove average difference labels
   }
 
   // Initialize grade box for the first student

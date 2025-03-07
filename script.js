@@ -143,15 +143,15 @@ d3.csv("final_data.csv").then(data => {
 
     // Check if the animation reaches 4000 or 8000 Unix times
     if (currentTime >= 4000 && !svg.select(".average-difference-beginning").node()) {
-      const xPos = (xScale(0) + xScale(4000)) / 2; // Center between 0 and 4000
+      const xPos = (xScale(0) + xScale(1200)) / 2; // Center between 0 and 4000
       displayAverageDifference(studentData, 0, 4000, xPos, margin.top - 10, "beginning");
     }
     if (currentTime >= 8000 && !svg.select(".average-difference-middle").node()) {
-      const xPos = (xScale(4000) + xScale(8000)) / 2; // Center between 4000 and 8000
+      const xPos = (xScale(4000) + xScale(5200)) / 2; // Center between 4000 and 8000
       displayAverageDifference(studentData, 4000, 8000, xPos, margin.top - 10, "middle");
     }
     if (currentTime >= d3.max(studentData, d => d.unix) && !svg.select(".average-difference-end").node()) {
-      const xPos = (xScale(8000) + xScale(d3.max(studentData, d => d.unix))) / 2; // Center between 8000 and end time
+      const xPos = (xScale(8000) + xScale(d3.max(studentData, d => d.unix - 1400))) / 2; // Center between 8000 and end time
       displayAverageDifference(studentData, 8000, d3.max(studentData, d => d.unix), xPos, margin.top - 10, "end");
     }
   }

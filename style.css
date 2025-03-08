@@ -1,7 +1,7 @@
 body {
     font-family: 'Arial', sans-serif;
     margin: 20px;
-    background-color: #f5f5f5;
+    background-color:black;
   }
   
   h1 {
@@ -78,4 +78,31 @@ body {
     font-size: 14px;
     font-weight: bold;
     fill: #333;
+  }
+
+  #button-container {
+    border: solid;
+    width: 850px;
+    text-align: center;
+    margin: auto;
+    padding-top: none;
+    background-color: black;
+  }
+  
+  #button-container button {
+    margin: 5px;
+    padding: 10px;
+    background-color: gray;
+    color: white;
+    border: solid;
+    cursor: pointer;
+  }
+  
+  #button-container button:hover {
+    background-color: #45a049;
+  }
+
+  #chart{
+    border: 1px solid gray;
+    background-color: black;
   }

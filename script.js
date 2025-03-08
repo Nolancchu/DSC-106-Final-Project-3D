@@ -20,6 +20,23 @@ d3.csv("final_data.csv").then(data => {
     d.grade = +d.grade;
   });
 
+  // Get unique student IDs
+  const studentIds = [...new Set(examData.map(d => d.student_id))];
+  const buttonWidth = 850 / studentIds.length - 10; // Subtract margin
+  // Create buttons for each student
+  const buttonContainer = d3.select("#button-container");
+  buttonContainer.selectAll("button")
+    .data(studentIds)
+    .enter()
+    .append("button")
+    .text(d => d)
+    .style("width", `${buttonWidth}px`)
+    .on("click", function (event, d) {
+      selectedStudent = d; // Update selected student
+      resetCharts();
+      updateGradeBox(); // Update grade box immediately
+    });
+
   // Set up chart dimensions
   const maxUnixTime = d3.max(examData, d => d.unix); // Get the maximum Unix time across all students
   const xScale = d3.scaleLinear()
@@ -44,10 +61,14 @@ d3.csv("final_data.csv").then(data => {
 
   svg.append("g")
     .attr("transform", `translate(0,${height - margin.bottom})`)
-    .call(xAxis);
+    .call(xAxis)
+    .attr("stroke", "gray") // Set axis stroke color to gray
+    .attr("color", "gray"); // Set tick text color to gray
 
   svg.append("g")
-    .call(yAxis);
+    .call(yAxis)
+    .attr("stroke", "gray") // Set axis stroke color to gray
+    .attr("color", "gray"); // Set tick text color to gray
 
   // Add shaded region for resting heart rate (60-100 BPM)
   svg.append("rect")
@@ -64,7 +85,7 @@ d3.csv("final_data.csv").then(data => {
     .attr("x2", width - margin.right)
     .attr("y1", yScale(60))
     .attr("y2", yScale(60))
-    .attr("stroke", "blue")
+    .attr("stroke", "cyan") // Use cyan for better visibility on black background
     .attr("stroke-dasharray", "5,5");
 
   svg.append("line")
@@ -72,7 +93,7 @@ d3.csv("final_data.csv").then(data => {
     .attr("x2", width - margin.right)
     .attr("y1", yScale(100))
     .attr("y2", yScale(100))
-    .attr("stroke", "blue")
+    .attr("stroke", "cyan") // Use cyan for better visibility on black background
     .attr("stroke-dasharray", "5,5");
 
   // Add vertical lines at 4000 and 8000 Unix times
@@ -81,7 +102,7 @@ d3.csv("final_data.csv").then(data => {
     .attr("x2", xScale(4000))
     .attr("y1", margin.top)
     .attr("y2", height - margin.bottom)
-    .attr("stroke", "black")
+    .attr("stroke", "white") // Use white for better visibility on black background
     .attr("stroke-width", 1);
 
   svg.append("line")
@@ -89,7 +110,7 @@ d3.csv("final_data.csv").then(data => {
     .attr("x2", xScale(8000))
     .attr("y1", margin.top)
     .attr("y2", height - margin.bottom)
-    .attr("stroke", "black")
+    .attr("stroke", "white") // Use white for better visibility on black background
     .attr("stroke-width", 1);
 
   // Add heart rate line
@@ -100,7 +121,7 @@ d3.csv("final_data.csv").then(data => {
   let heartRatePath = svg.append("path")
     .attr("class", "line")
     .attr("d", heartRateLine([])) // Start with an empty path
-    .attr("stroke", "darkblue") // Dark blue line
+    .attr("stroke", "lime") // Use lime green for better visibility on black background
     .attr("stroke-width", 1.5)
     .attr("fill", "none");
 
@@ -115,13 +136,6 @@ d3.csv("final_data.csv").then(data => {
       }
       startAnimation();
     }
-  });
-
-  // Update chart when a new student is selected
-  d3.select("#student-select").on("change", () => {
-    selectedStudent = d3.select("#student-select").property("value");
-    resetCharts();
-    updateGradeBox(); // Update grade box immediately
   });
 
   // Function to update chart based on current time
@@ -182,7 +196,8 @@ d3.csv("final_data.csv").then(data => {
       .attr("class", `average-difference-label average-difference-${section}`)
       .attr("x", xPos)
       .attr("y", yPos)
-      .text(`Avg Diff: ${avgDifference} BPM`);
+      .text(`Avg Diff: ${avgDifference} BPM`)
+      .attr("fill", "white"); // Set text color to white
   }
 
   // Function to update grade box

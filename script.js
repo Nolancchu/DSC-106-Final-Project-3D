@@ -1,7 +1,7 @@
 let examData = [];
 let selectedStudent = "S1"; // Default selected student
 
-const margin = { top: 40, right: 30, bottom: 50, left: 60 };
+const margin = { top: 40, right: 30, bottom: 50, left: 60 }; // Reset right margin
 const width = 800 - margin.left - margin.right;
 const height = 400 - margin.top - margin.bottom;
 
@@ -18,21 +18,41 @@ d3.csv("final_data.csv").then(data => {
 
   // Get unique student IDs
   const studentIds = [...new Set(examData.map(d => d.student_id))];
-  const buttonWidth = 850 / studentIds.length - 10; // Subtract margin
 
   // Create buttons for each student
   const buttonContainer = d3.select("#button-container");
-  buttonContainer.selectAll("button")
+  const buttons = buttonContainer.selectAll("button")
     .data(studentIds)
     .enter()
     .append("button")
     .text(d => d)
-    .style("width", `${buttonWidth}px`)
+    .attr("class", "student-button")
+    .style("background-color", "gray") // Default gray color
+    .classed("active", d => d === selectedStudent) // Highlight default student
     .on("click", function (event, d) {
-      selectedStudent = d; // Update selected student
-      updateChart(); // Update the chart immediately
-      updateGradeBox(); // Update grade box
+      // Remove highlight from all buttons
+      buttons.classed("active", false).style("background-color", "gray");
+      // Highlight the clicked button with the appropriate color
+      const studentData = examData.find(data => data.student_id === d);
+      let color = "gray"; // Default color
+      if (studentData.grade >= 85) color = "lightgreen"; // Good performers
+      else if (studentData.grade >= 75) color = "orange"; // Average performers
+      else color = "lightcoral"; // Poor performers
+      d3.select(this).classed("active", true).style("background-color", color);
+      // Update selected student
+      selectedStudent = d;
+      // Update the chart and grade box
+      updateChart();
+      updateGradeBox();
     });
+
+  // Set the color for the default selected student
+  const defaultStudentData = examData.find(data => data.student_id === selectedStudent);
+  let defaultColor = "gray"; // Default color
+  if (defaultStudentData.grade >= 85) defaultColor = "lightgreen"; // Good performers
+  else if (defaultStudentData.grade >= 75) defaultColor = "orange"; // Average performers
+  else defaultColor = "lightcoral"; // Poor performers
+  d3.select(".student-button.active").style("background-color", defaultColor);
 
   // Set up chart dimensions
   const maxUnixTime = d3.max(examData, d => d.unix); // Get the maximum Unix time across all students
@@ -47,8 +67,8 @@ d3.csv("final_data.csv").then(data => {
   // Create SVG element for the chart
   const svg = d3.select("#chart")
     .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("width", width + margin.left + margin.right) // Full width including margins
+    .attr("height", height + margin.top + margin.bottom) // Full height including margins
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
@@ -118,7 +138,7 @@ d3.csv("final_data.csv").then(data => {
   let heartRatePath = svg.append("path")
     .attr("class", "line")
     .attr("d", heartRateLine([])) // Start with an empty path
-    .attr("stroke", "lime") // Use lime green for better visibility on black background
+    .attr("stroke", "red") // Heart rate line is red
     .attr("stroke-width", 1.5)
     .attr("fill", "none");
 
@@ -184,11 +204,13 @@ d3.csv("final_data.csv").then(data => {
     if (grade >= 85) {
       gradeBox.style("background-color", "lightgreen");
     } else if (grade >= 75) {
-      gradeBox.style("background-color", "lightyellow");
+      gradeBox.style("background-color", "orange");
     } else {
       gradeBox.style("background-color", "lightcoral");
     }
   }
+
+  // Function to animate the black box and update real-time data
   function animateBlackBox() {
     const boxWidth = 50; // Width of the black box
     const boxHeight = height - margin.top - margin.bottom; // Height of the black box
@@ -208,10 +230,31 @@ d3.csv("final_data.csv").then(data => {
       blackBox
         .attr("x", margin.left)
         .transition()
-        .duration(d3.max(examData, d => d.unix) * 0.25) // Match duration with graph animation
+        .duration(20000) // 20 seconds for the animation (slower)
         .ease(d3.easeLinear)
         .attr("x", width - margin.right - boxWidth)
-        .on("end", startBlackBoxAnimation); // Repeat the animation
+        .on("end", startBlackBoxAnimation) // Repeat the animation
+        .on("interrupt", () => console.log("Animation interrupted")) // Handle interruption
+        .tween("move", function() {
+          const studentData = examData.filter(d => d.student_id === selectedStudent);
+          const xScale = d3.scaleLinear()
+            .domain([0, d3.max(studentData, d => d.unix)])
+            .range([margin.left, width - margin.right]);
+
+          return function(t) {
+            const currentX = margin.left + (width - margin.right - boxWidth - margin.left) * t;
+            const currentUnixTime = xScale.invert(currentX);
+
+            // Find the closest data point to the current Unix time
+            const closestDataPoint = studentData.reduce((prev, curr) => {
+              return (Math.abs(curr.unix - currentUnixTime) < Math.abs(prev.unix - currentUnixTime) ? curr : prev);
+            });
+
+            // Update the real-time information
+            d3.select("#unix-time").text(closestDataPoint.unix);
+            d3.select("#heart-rate").text(`${closestDataPoint.heart_rate_bpm} BPM`);
+          };
+        });
     }
 
     startBlackBoxAnimation(); // Start the animation

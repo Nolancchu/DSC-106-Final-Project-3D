@@ -1,45 +1,35 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color:black;
+    background-color: black;
+    color: white;
   }
   
-  h1 {
+  h1, h3 {
     text-align: center;
     color: #e6e5e5;
-
   }
-  h3 {
-    text-align: center;
-    color: #e6e5e5;
-    margin-bottom:30px 0;
-  }
-  #controls {
+  
+  #button-container {
     text-align: center;
     margin-bottom: 20px;
   }
   
-  #controls label {
-    font-size: 16px;
-    color: #333;
-  }
-  
-  #controls select, #controls button {
-    padding: 10px 20px;
-    margin: 0 5px;
+  #button-container button {
+    margin: 5px;
+    padding: 10px;
+    color: white;
     border: none;
     border-radius: 5px;
-    background-color: #ddd;
     cursor: pointer;
     transition: background-color 0.3s;
   }
   
-  #controls button {
-    background-color: #0066cc;
-    color: white;
+  #button-container button.active {
+    border: 2px solid white; /* Highlight selected button with a white border */
   }
   
-  #controls button:hover {
-    background-color: #005bb5;
+  #button-container button:hover {
+    background-color: #45a049; /* Hover effect */
   }
   
   #grade-box {
@@ -50,62 +40,116 @@ body {
     border-radius: 5px;
     font-size: 18px;
     font-weight: bold;
+    color: black;
+  }
+  
+  #grade-box.good-grade {
+    background-color: lightgreen;
+  }
+  
+  #grade-box.average-grade {
+    background-color: orange;
+  }
+  
+  #grade-box.bad-grade {
+    background-color: lightcoral;
+  }
+  
+  #chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px; /* Space between chart and legend */
+    margin: 20px auto;
+    width: 1000px; /* Adjust as needed */
   }
   
   #chart {
     width: 800px;
     height: 400px;
-    margin: 20px auto;
-    background-color: white;
+    border: 1px solid gray;
+    background-color: black;
+  }
+  
+  #legend {
+    background-color: black;
+    padding: 10px;
+    border: 1px solid gray;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 200px; /* Adjust as needed */
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .legend-line {
+    width: 20px;
+    height: 2px;
+    background-color: lime;
+    margin-right: 10px;
+  }
+  
+  .legend-rect {
+    width: 20px;
+    height: 10px;
+    margin-right: 10px;
+  }
+  
+  .legend-label {
+    font-size: 14px;
+    color: white;
   }
   
   #info-box {
     text-align: center;
     margin: 20px auto;
     padding: 10px;
-    background-color: white;
+    background-color: black;
+    border: 1px solid gray;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 300px;
+    color: white;
   }
   
   #info-box div {
     margin: 5px 0;
     font-size: 16px;
-    color: #333;
   }
 
-  .average-difference-label {
-    font-size: 14px;
-    font-weight: bold;
-    fill: #e6e5e5;
-  }
+  /* Write-up Styling */
+.write-up {
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 800px;
+  background-color: #1e1e1e; /* Dark background for consistency */
+  border: 1px solid #444; /* Subtle border */
+  border-radius: 8px;
+  color: #e6e5e5; /* Light text color */
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6;
+}
 
-  #button-container {
-    border: solid;
-    width: 850px;
-    text-align: center;
-    margin: auto;
-    padding-top: none;
-    background-color: black;
-  }
-  
-  #button-container button {
-    margin: 5px;
-    padding: 10px;
-    background-color: gray;
-    color: white;
-    border: solid;
-    cursor: pointer;
-  }
-  
-  #button-container button:hover {
-    background-color: #45a049;
-  }
+.write-up h2 {
+  color: #ffffff; /* White for headings */
+  font-size: 24px;
+  margin-bottom: 15px;
+  text-align: center;
+}
 
-  #chart{
-    border: 1px solid gray;
-    background-color: black;
-  }
+.write-up p {
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.write-up b {
+  color: #ffffff; /* White for bold text */
+  font-weight: bold;
+}
+
+/* Remove the pause button styling */
+#controls {
+  display: none; /* Hide the controls div */
+}

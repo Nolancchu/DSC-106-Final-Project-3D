@@ -8,13 +8,48 @@
 </head>
 <body>
   <h1>From Resting to Racing</h1>
-  <h3>How does our heart rate change as take exams?</h3>
-  <div id="grade-box"></div>
-  <div id="chart"></div>
+  <h3>How does our heart rate change as we take exams?</h3>
   <div id="button-container"></div>
+  <div id="grade-box"></div>
+  <div id="chart-container">
+    <div id="chart"></div>
+    <div id="legend">
+      <div class="legend-item">
+        <div class="legend-line" style="background-color: red;"></div>
+        <div class="legend-label">Heart Rate</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-rect" style="background-color: lightgreen;"></div>
+        <div class="legend-label">Good Performers (Grade ≥ 85%)</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-rect" style="background-color: orange;"></div>
+        <div class="legend-label">Average Performers (75% ≤ Grade < 85%)</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-rect" style="background-color: lightcoral;"></div>
+        <div class="legend-label">Poor Performers (Grade < 75%)</div>
+      </div>
+    </div>
+  </div>
   <div id="info-box">
     <div>Unix Time: <span id="unix-time">--</span></div>
     <div>Heart Rate: <span id="heart-rate">-- BPM</span></div>
+  </div>
+  <div class="vertical-divider"></div>
+  <div class="content-area">
+    <div class="visualization" id="viz5"></div>
+    <div class="write-up">
+      <h2>Project Progress and Challenges</h2>
+      <p>
+        <b>What have you done so far?</b><br>
+        So far, our team has made fairly great progress. We spent about two to three hours preprocessing the data, which included data cleaning/organization, in addition to performing some exploratory data analysis. During our EDA, we explored trends like heart rate, temperature, and BVP over time for different students over various exams. Afterwards, based on the conclusions of our EDA, we came up with some visualization ideas. We ended up deciding on a stress simulator; we will be utilizing the heart rate of students during the duration of exams to determine how stress affects the grades students receive.
+      </p>
+      <p>
+        <b>What will be the most challenging part of your project to design, and why?</b><br>
+        One of the most challenging aspects of our project will be ensuring the real-time visualization effectively communicates the relationship of heart rate with exam performance. The heart rate animation, as well as the updating tooltip, must smoothly track/display data without overwhelming the user. Additionally, balancing interactivity, such as switching between students or highlighting their performance, while maintaining a clean, intuitive design will be difficult. Finally, ensuring the visualization is both visually engaging/informative without cluttering the chart or obscuring key insights will require careful design/testing.
+      </p>
+    </div>
   </div>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="script.js"></script>

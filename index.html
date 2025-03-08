@@ -7,40 +7,70 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>From Resting to Racing</h1>
-  <h3>How does our heart rate change as we take exams?</h3>
-  <div id="button-container"></div>
-  <div id="grade-box"></div>
-  <div id="chart-container">
-    <div id="chart"></div>
-    <div id="legend">
-      <div class="legend-item">
-        <div class="legend-line" style="background-color: red;"></div>
-        <div class="legend-label">Heart Rate</div>
-      </div>
-      <div class="legend-item">
-        <div class="legend-rect" style="background-color: lightgreen;"></div>
-        <div class="legend-label">Good Performers (Grade ≥ 85%)</div>
-      </div>
-      <div class="legend-item">
-        <div class="legend-rect" style="background-color: orange;"></div>
-        <div class="legend-label">Average Performers (75% ≤ Grade < 85%)</div>
-      </div>
-      <div class="legend-item">
-        <div class="legend-rect" style="background-color: lightcoral;"></div>
-        <div class="legend-label">Poor Performers (Grade < 75%)</div>
+  <div class="header">
+    <h1>From Resting to Racing</h1>
+    <h3>How does our heart rate change as we take exams?</h3>
+  </div>
+  <div class="content">
+    <div id="button-container"></div>
+    <div id="grade-box"></div>
+    <div id="chart-container">
+      <div id="chart"></div>
+      <div id="legend">
+        <div class="legend-item">
+          <div class="legend-line" style="background-color: red;"></div>
+          <div class="legend-label">Heart Rate</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-rect" style="background-color: lightgreen;"></div>
+          <div class="legend-label">Good Performers (Grade ≥ 85%)</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-rect" style="background-color: orange;"></div>
+          <div class="legend-label">Average Performers (75% ≤ Grade < 85%)</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-rect" style="background-color: lightcoral;"></div>
+          <div class="legend-label">Poor Performers (Grade < 75%)</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-icon" style="color: red; font-size: 20px; line-height: 1;">+</div>
+          <div class="legend-label">Average Heart Rate Deviation from Resting</div>
+        </div>
       </div>
     </div>
-  </div>
-  <div id="info-box">
-    <div>Unix Time: <span id="unix-time">--</span></div>
-    <div>Heart Rate: <span id="heart-rate">-- BPM</span></div>
-  </div>
-  <div class="vertical-divider"></div>
-  <div class="content-area">
-    <div class="visualization" id="viz5"></div>
+    <div id="info-container">
+      <div id="info-box">
+        <div><u>Real-Time Data</u></div>
+        <div class="info-content">
+          <div class="info-row">Student: <span id="student-id">S1</span></div>
+          <div class="info-row">Unix Time: <span id="unix-time">--</span></div>
+          <div class="info-row">Heart Rate: <span id="heart-rate">-- BPM</span></div>
+        </div>
+      </div>
+      <div id="stress-score-box">
+        <div><u>Stress Score</u></div>
+        <div class="dropdown-row">
+          <span>Exam Performance:</span>
+          <select id="performance-group">
+            <option value="good">Good Performers</option>
+            <option value="average">Average Performers</option>
+            <option value="poor">Poor Performers</option>
+          </select>
+        </div>
+        <div class="dropdown-row">
+          <span>Test Section:</span>
+          <select id="test-section">
+            <option value="beginning">Beginning of Test</option>
+            <option value="middle">Middle of Test</option>
+            <option value="end">End of Test</option>
+          </select>
+        </div>
+        <div id="stress-score-value">+0.00</div>
+      </div>
+    </div>
     <div class="write-up">
-      <h2>Project Progress and Challenges</h2>
+      <h2>Write-Up</h2>
       <p>
         <b>What have you done so far?</b><br>
         So far, our team has made fairly great progress. We spent about two to three hours preprocessing the data, which included data cleaning/organization, in addition to performing some exploratory data analysis. During our EDA, we explored trends like heart rate, temperature, and BVP over time for different students over various exams. Afterwards, based on the conclusions of our EDA, we came up with some visualization ideas. We ended up deciding on a stress simulator; we will be utilizing the heart rate of students during the duration of exams to determine how stress affects the grades students receive.

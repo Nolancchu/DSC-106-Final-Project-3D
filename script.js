@@ -1,9 +1,5 @@
 let examData = [];
-let timeExtent = [0, 0];
-let selectedStudent = "S1";
-let isPlaying = false;
-let animationTimer = null;
-let currentTime = 0; // Track current time for animation
+let selectedStudent = "S1"; // Default selected student
 
 const margin = { top: 40, right: 30, bottom: 50, left: 60 };
 const width = 800 - margin.left - margin.right;
@@ -23,6 +19,7 @@ d3.csv("final_data.csv").then(data => {
   // Get unique student IDs
   const studentIds = [...new Set(examData.map(d => d.student_id))];
   const buttonWidth = 850 / studentIds.length - 10; // Subtract margin
+
   // Create buttons for each student
   const buttonContainer = d3.select("#button-container");
   buttonContainer.selectAll("button")
@@ -33,8 +30,8 @@ d3.csv("final_data.csv").then(data => {
     .style("width", `${buttonWidth}px`)
     .on("click", function (event, d) {
       selectedStudent = d; // Update selected student
-      resetCharts();
-      updateGradeBox(); // Update grade box immediately
+      updateChart(); // Update the chart immediately
+      updateGradeBox(); // Update grade box
     });
 
   // Set up chart dimensions
@@ -125,57 +122,30 @@ d3.csv("final_data.csv").then(data => {
     .attr("stroke-width", 1.5)
     .attr("fill", "none");
 
-  // Play button functionality
-  const playButton = d3.select("#play-button");
-  playButton.on("click", () => {
-    if (isPlaying) {
-      pauseAnimation();
-    } else {
-      if (playButton.text() === "Restart") {
-        resetCharts();
-      }
-      startAnimation();
-    }
-  });
-
-  // Function to update chart based on current time
-  function updateCharts(currentTime) {
+  // Function to update the chart for the selected student
+  function updateChart() {
     const studentData = examData.filter(d => d.student_id === selectedStudent);
 
-    // Filter data up to the current time
-    const filteredData = studentData.filter(d => d.unix <= currentTime);
-
-    // Update the path with a smooth transition
+    // Update the path with the full data
     heartRatePath
-      .datum(filteredData)
-      .transition()
-      .duration(100) // Smooth transition over 100ms
+      .datum(studentData)
       .attr("d", heartRateLine);
 
     // Update real-time information
-    const currentData = filteredData[filteredData.length - 1];
+    const currentData = studentData[studentData.length - 1];
     if (currentData) {
       d3.select("#unix-time").text(currentData.unix);
       d3.select("#heart-rate").text(`${currentData.heart_rate_bpm} BPM`);
     }
 
-    // Check if the animation reaches 4000 or 8000 Unix times
-    if (currentTime >= 4000 && !svg.select(".average-difference-beginning").node()) {
-      const xPos = (xScale(0) + xScale(1200)) / 2; // Center between 0 and 4000
-      displayAverageDifference(studentData, 0, 4000, xPos, margin.top - 10, "beginning");
-    }
-    if (currentTime >= 8000 && !svg.select(".average-difference-middle").node()) {
-      const xPos = (xScale(4000) + xScale(5200)) / 2; // Center between 4000 and 8000
-      displayAverageDifference(studentData, 4000, 8000, xPos, margin.top - 10, "middle");
-    }
-    if (currentTime >= d3.max(studentData, d => d.unix) && !svg.select(".average-difference-end").node()) {
-      const xPos = (xScale(8000) + xScale(d3.max(studentData, d => d.unix - 1400))) / 2; // Center between 8000 and end time
-      displayAverageDifference(studentData, 8000, d3.max(studentData, d => d.unix), xPos, margin.top - 10, "end");
-    }
+    // Display average differences
+    displayAverageDifference(studentData, 0, 4000, "beginning");
+    displayAverageDifference(studentData, 4000, 8000, "middle");
+    displayAverageDifference(studentData, 8000, d3.max(studentData, d => d.unix), "end");
   }
 
   // Function to calculate and display average difference in heart rate
-  function displayAverageDifference(data, startTime, endTime, xPos, yPos, section) {
+  function displayAverageDifference(data, startTime, endTime, section) {
     const sectionData = data.filter(d => d.unix >= startTime && d.unix <= endTime);
     if (sectionData.length === 0) {
       console.log(`No data for ${section} section for student ${selectedStudent}`);
@@ -191,11 +161,15 @@ d3.csv("final_data.csv").then(data => {
     const restingHeartRate = 80; // Middle of the resting heart rate range (60-100 BPM)
     const avgDifference = (avgHeartRate - restingHeartRate).toFixed(2);
 
+    // Remove existing label if it exists
+    svg.select(`.average-difference-${section}`).remove();
+
     // Display the average difference
+    const xPos = (xScale(startTime) + xScale(endTime)) / 2; // Center between start and end times
     svg.append("text")
       .attr("class", `average-difference-label average-difference-${section}`)
       .attr("x", xPos)
-      .attr("y", yPos)
+      .attr("y", margin.top - 10)
       .text(`Avg Diff: ${avgDifference} BPM`)
       .attr("fill", "white"); // Set text color to white
   }
@@ -215,49 +189,35 @@ d3.csv("final_data.csv").then(data => {
       gradeBox.style("background-color", "lightcoral");
     }
   }
+  function animateBlackBox() {
+    const boxWidth = 50; // Width of the black box
+    const boxHeight = height - margin.top - margin.bottom; // Height of the black box
 
-  // Function to start animation
-  function startAnimation() {
-    isPlaying = true;
-    playButton.text("Pause");
+    // Create the black box
+    const blackBox = svg.append("rect")
+      .attr("class", "black-box")
+      .attr("x", margin.left)
+      .attr("y", margin.top)
+      .attr("width", boxWidth)
+      .attr("height", boxHeight)
+      .attr("fill", "black");
 
-    const startTime = 0;
-    const endTime = d3.max(examData, d => d.unix);
+    // Function to start the black box animation
+    function startBlackBoxAnimation() {
+      blackBox
+        .attr("x", margin.left)
+        .transition()
+        .duration(d3.max(examData, d => d.unix) * 0.25) // Match duration with graph animation
+        .ease(d3.easeLinear)
+        .attr("x", width - margin.right - boxWidth)
+        .on("end", startBlackBoxAnimation); // Repeat the animation
+    }
 
-    // Use D3 transition for smooth animation
-    d3.transition()
-      .duration(endTime * 0.5) // Adjust duration for smoothness (10ms per unit time)
-      .ease(d3.easeLinear)
-      .tween("currentTime", () => {
-        return t => {
-          currentTime = t * endTime; // Update currentTime based on progress
-          updateCharts(currentTime);
-        };
-      })
-      .on("end", () => {
-        pauseAnimation();
-        playButton.text("Restart");
-      });
+    startBlackBoxAnimation(); // Start the animation
   }
 
-  // Function to pause animation
-  function pauseAnimation() {
-    isPlaying = false;
-    playButton.text("Play");
-    svg.interrupt(); // Stop all transitions
-  }
-
-  // Function to reset charts
-  function resetCharts() {
-    pauseAnimation();
-    currentTime = 0; // Reset current time
-    heartRatePath.attr("d", heartRateLine([]));
-    d3.select("#unix-time").text("--");
-    d3.select("#heart-rate").text("-- BPM");
-    playButton.text("Play");
-    svg.selectAll(".average-difference-label").remove(); // Remove average difference labels
-  }
-
-  // Initialize grade box for the first student
+  // Initialize the chart for the first student
+  animateBlackBox();
+  updateChart();
   updateGradeBox();
 });

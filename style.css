@@ -5,8 +5,14 @@ body {
   margin: 0;
   padding: 0;
   display: flex;
+  justify-content: center; /* Center the container horizontally */
+}
+
+.container {
+  width: 1000px; /* Match the chart container width */
+  display: flex;
   flex-direction: column;
-  align-items: center; /* Center everything horizontally */
+  align-items: center; /* Center everything inside the container */
 }
 
 .header {
@@ -16,13 +22,6 @@ body {
 
 h1, h3 {
   color: #e6e5e5;
-}
-
-.content {
-  width: 1000px; /* Match the chart container width */
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Center everything horizontally */
 }
 
 #button-container {

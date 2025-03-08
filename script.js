@@ -139,9 +139,9 @@ d3.csv("final_data.csv").then(data => {
     }
 
     // Display average differences
-    displayAverageDifference(studentData, 0, 4000, "beginning");
-    displayAverageDifference(studentData, 4000, 8000, "middle");
-    displayAverageDifference(studentData, 8000, d3.max(studentData, d => d.unix), "end");
+    displayAverageDifference(studentData, 0, 1300, "beginning");
+    displayAverageDifference(studentData, 4000, 5500, "middle");
+    displayAverageDifference(studentData, 8000, d3.max(studentData, d => d.unix - 1400), "end");
   }
 
   // Function to calculate and display average difference in heart rate
@@ -200,7 +200,8 @@ d3.csv("final_data.csv").then(data => {
       .attr("y", margin.top)
       .attr("width", boxWidth)
       .attr("height", boxHeight)
-      .attr("fill", "black");
+      .attr("fill", "black")
+      .attr("opacity", 0.9);
 
     // Function to start the black box animation
     function startBlackBoxAnimation() {

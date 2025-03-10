@@ -179,9 +179,9 @@ d3.csv("final_data.csv").then(data => {
       d3.select("#heart-rate").text(`${currentData.heart_rate_bpm} BPM`);
     }
 
-    displayAverageDifference(studentData, 0, 1300, "beginning");
-    displayAverageDifference(studentData, 4000, 5500, "middle");
-    displayAverageDifference(studentData, 8000, d3.max(studentData, d => d.unix - 1400), "end");
+    displayAverageDifference(studentData, 0, 1900, "beginning");
+    displayAverageDifference(studentData, 4000, 6300, "middle");
+    displayAverageDifference(studentData, 8000, d3.max(studentData, d => d.unix - 1200), "end");
   }
 
   function displayAverageDifference(data, startTime, endTime, section) {

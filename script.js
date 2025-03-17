@@ -185,7 +185,7 @@ d3.csv("final_data.csv").then(data => {
 
     const currentData = studentData[studentData.length - 1];
     if (currentData) {
-      d3.select("#unix-time").text(currentData.unix);
+      d3.select("#unix-time").text((currentData.unix / 60).toFixed(2)); // Convert to minutes
       d3.select("#heart-rate").text(`${currentData.heart_rate_bpm} BPM`);
     }
 
@@ -233,7 +233,7 @@ d3.csv("final_data.csv").then(data => {
   function animateBlackBox() {
     const boxWidth = 25;
     const boxHeight = height - margin.top - margin.bottom;
-
+  
     const blackBox = svg.append("rect")
       .attr("class", "black-box")
       .attr("x", margin.left)
@@ -242,36 +242,38 @@ d3.csv("final_data.csv").then(data => {
       .attr("height", boxHeight)
       .attr("fill", "black")
       .attr("opacity", 0.9);
-
+  
     function startBlackBoxAnimation() {
       blackBox
         .attr("x", margin.left)
         .transition()
-        .duration(20000)
+        .duration(20000) // Adjust duration if needed
         .ease(d3.easeLinear)
         .attr("x", width - margin.right - boxWidth)
         .on("end", startBlackBoxAnimation)
         .on("interrupt", () => console.log("Animation interrupted"))
         .tween("move", function() {
           const studentData = examData.filter(d => d.student_id === selectedStudent);
-          const xScale = d3.scaleLinear()
-            .domain([0, d3.max(studentData, d => d.unix / 60)]) // Convert to minutes
-            .range([margin.left, width - margin.right]);
-
+          const maxTimeInMinutes = d3.max(studentData, d => d.unix / 60); // Convert max Unix time to minutes
+  
           return function(t) {
             const currentX = margin.left + (width - margin.right - boxWidth - margin.left) * t;
-            const currentUnixTime = xScale.invert(currentX) * 60; // Convert back to seconds
-
+            const currentTimeInMinutes = maxTimeInMinutes * t; // Current time in minutes
+  
+            // Find the closest data point to the current time
             const closestDataPoint = studentData.reduce((prev, curr) => {
-              return (Math.abs(curr.unix - currentUnixTime) < Math.abs(prev.unix - currentUnixTime) ? curr : prev);
+              const currTimeInMinutes = curr.unix / 60; // Convert Unix time to minutes
+              const prevTimeInMinutes = prev.unix / 60; // Convert Unix time to minutes
+              return (Math.abs(currTimeInMinutes - currentTimeInMinutes) < Math.abs(prevTimeInMinutes - currentTimeInMinutes) ? curr : prev);
             });
-
-            d3.select("#unix-time").text(closestDataPoint.unix);
+  
+            // Update the real-time data box
+            d3.select("#unix-time").text(currentTimeInMinutes.toFixed(2)); // Display time in minutes
             d3.select("#heart-rate").text(`${closestDataPoint.heart_rate_bpm} BPM`);
           };
         });
     }
-
+  
     startBlackBoxAnimation();
   }
 

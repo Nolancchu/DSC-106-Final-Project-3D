@@ -27,20 +27,20 @@ d3.csv("final_data.csv").then(data => {
     .classed("active", d => d === selectedStudent)
     .on("click", function (event, d) {
       buttons.classed("active", false).style("background-color", "gray");
-  const studentData = examData.find(data => data.student_id === d);
-  let color = "gray";
-  if (studentData.grade >= 85) color = "lightgreen";
-  else if (studentData.grade >= 75) color = "orange";
-  else color = "lightcoral";
-  d3.select(this).classed("active", true).style("background-color", color);
-  selectedStudent = d;
+      const studentData = examData.find(data => data.student_id === d);
+      let color = "gray";
+      if (studentData.grade >= 85) color = "lightgreen";
+      else if (studentData.grade >= 75) color = "orange";
+      else color = "lightcoral";
+      d3.select(this).classed("active", true).style("background-color", color);
+      selectedStudent = d;
 
-  // Update the student ID in the real-time box
-  d3.select("#student-id").text(d);
+      // Update the student ID in the real-time box
+      d3.select("#student-id").text(d);
 
-  // Update the chart and grade box
-  updateChart();
-  updateGradeBox();
+      // Update the chart and grade box
+      updateChart();
+      updateGradeBox();
     });
 
   const defaultStudentData = examData.find(data => data.student_id === selectedStudent);
@@ -51,8 +51,11 @@ d3.csv("final_data.csv").then(data => {
   d3.select(".student-button.active").style("background-color", defaultColor);
 
   const maxUnixTime = d3.max(examData, d => d.unix);
+  const maxMinutes = maxUnixTime / 60; // Convert max Unix time to minutes
+
+  // Update xScale to use minutes
   const xScale = d3.scaleLinear()
-    .domain([0, maxUnixTime])
+    .domain([0, maxMinutes]) // Domain is now in minutes
     .range([margin.left, width - margin.right]);
 
   const yScale = d3.scaleLinear()
@@ -66,7 +69,10 @@ d3.csv("final_data.csv").then(data => {
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  const xAxis = d3.axisBottom(xScale).tickFormat(d3.format("d"));
+  // Update xAxis to format ticks in minutes
+  const xAxis = d3.axisBottom(xScale)
+    .tickFormat(d => `${d}`); // Format ticks as "X min"
+
   const yAxis = d3.axisLeft(yScale);
 
   svg.append("g")
@@ -80,13 +86,14 @@ d3.csv("final_data.csv").then(data => {
     .attr("stroke", "gray")
     .attr("color", "gray");
 
+  // Update the x-axis label
   svg.append("text")
     .attr("x", width / 2)
     .attr("y", height - margin.bottom + 40)
     .attr("text-anchor", "middle")
     .attr("fill", "gray")
     .attr("font-size", "12px")
-    .text("Unix Time (Seconds)");
+    .text("Time (Minutes)"); // Updated label
 
   svg.append("text")
     .attr("transform", "rotate(-90)")
@@ -121,45 +128,48 @@ d3.csv("final_data.csv").then(data => {
     .attr("stroke", "cyan")
     .attr("stroke-dasharray", "5,5");
 
+  // Update vertical lines to use minutes
   svg.append("line")
-    .attr("x1", xScale(4000))
-    .attr("x2", xScale(4000))
+    .attr("x1", xScale(4000 / 60)) // Convert to minutes
+    .attr("x2", xScale(4000 / 60))
     .attr("y1", margin.top)
     .attr("y2", height - margin.bottom)
     .attr("stroke", "white")
     .attr("stroke-width", 1);
 
   svg.append("line")
-    .attr("x1", xScale(8000))
-    .attr("x2", xScale(8000))
+    .attr("x1", xScale(8000 / 60)) // Convert to minutes
+    .attr("x2", xScale(8000 / 60))
     .attr("y1", margin.top)
     .attr("y2", height - margin.bottom)
     .attr("stroke", "white")
     .attr("stroke-width", 1);
 
+  // Update text labels for exam sections
   svg.append("text")
-    .attr("x", (xScale(0) + xScale(4000)) / 2)
+    .attr("x", (xScale(0) + xScale(4000 / 60)) / 2)
     .attr("y", height - margin.bottom + 70)
     .attr("text-anchor", "middle")
     .attr("fill", "white")
     .text("Beginning of Exam");
 
   svg.append("text")
-    .attr("x", (xScale(4000) + xScale(8000)) / 2)
+    .attr("x", (xScale(4000 / 60) + xScale(8000 / 60)) / 2)
     .attr("y", height - margin.bottom + 70)
     .attr("text-anchor", "middle")
     .attr("fill", "white")
     .text("Middle of Exam");
 
   svg.append("text")
-    .attr("x", (xScale(8000) + xScale(d3.max(examData, d => d.unix))) / 2)
+    .attr("x", (xScale(8000 / 60) + xScale(maxMinutes)) / 2)
     .attr("y", height - margin.bottom + 70)
     .attr("text-anchor", "middle")
     .attr("fill", "white")
     .text("End of Exam");
 
+  // Update heartRateLine to use minutes
   const heartRateLine = d3.line()
-    .x(d => xScale(d.unix))
+    .x(d => xScale(d.unix / 60)) // Convert Unix time to minutes
     .y(d => yScale(d.heart_rate_bpm));
 
   let heartRatePath = svg.append("path")
@@ -195,7 +205,7 @@ d3.csv("final_data.csv").then(data => {
     const avgDifference = (avgHeartRate - restingHeartRate).toFixed(2);
 
     svg.select(`.average-difference-${section}`).remove();
-    const xPos = (xScale(startTime) + xScale(endTime)) / 2;
+    const xPos = (xScale(startTime / 60) + xScale(endTime / 60)) / 2; // Convert to minutes
     svg.append("text")
       .attr("class", `average-difference-label average-difference-${section}`)
       .attr("x", xPos)
@@ -245,12 +255,12 @@ d3.csv("final_data.csv").then(data => {
         .tween("move", function() {
           const studentData = examData.filter(d => d.student_id === selectedStudent);
           const xScale = d3.scaleLinear()
-            .domain([0, d3.max(studentData, d => d.unix)])
+            .domain([0, d3.max(studentData, d => d.unix / 60)]) // Convert to minutes
             .range([margin.left, width - margin.right]);
 
           return function(t) {
             const currentX = margin.left + (width - margin.right - boxWidth - margin.left) * t;
-            const currentUnixTime = xScale.invert(currentX);
+            const currentUnixTime = xScale.invert(currentX) * 60; // Convert back to seconds
 
             const closestDataPoint = studentData.reduce((prev, curr) => {
               return (Math.abs(curr.unix - currentUnixTime) < Math.abs(prev.unix - currentUnixTime) ? curr : prev);

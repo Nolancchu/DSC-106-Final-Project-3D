@@ -212,3 +212,52 @@ h1, h3 {
 #controls {
   display: none;
 }
+
+.header {
+  position: relative; /* Ensure the header is a positioning context */
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.header-buttons {
+  position: absolute;
+  top: 10px; /* Adjust as needed */
+  right: 790px; /* Adjust as needed */
+  display: flex;
+  gap: 10px; /* Space between buttons */
+}
+
+.header-button {
+  padding: 10px 15px;
+  background-color: #333;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  border: 1px solid gray;
+  transition: background-color 0.3s;
+  font-size: 14px;
+}
+
+.header-button:hover {
+  background-color: #555;
+}
+
+.intro-text {
+  margin: 20px auto; /* Adds spacing around the text */
+  max-width: 800px; /* Limits the width for readability */
+  color: #e6e5e5; /* Matches the existing text color */
+  font-family: 'Arial', sans-serif; /* Consistent font */
+  line-height: 1.6; /* Improves readability */
+  text-align: left; /* Aligns text to the left */
+}
+
+.intro-text p {
+  font-size: 16px; /* Matches the existing font size */
+  margin-bottom: 15px; /* Adds spacing between paragraphs */
+}
+
+.intro-text b {
+  color: #ffffff; /* Makes bold text stand out */
+  font-weight: bold; /* Ensures bold text is visible */
+}
+

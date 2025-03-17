@@ -299,7 +299,7 @@ d3.csv("final_data.csv").then(data => {
     const restingHeartRate = 80;
     const avgDifference = (avgHeartRate - restingHeartRate).toFixed(2);
 
-    d3.select("#stress-score-value").text(`+${avgDifference}`);
+    d3.select("#stress-score-value").text(`+${avgDifference} BPM`);
   }
 
   d3.select("#performance-group").on("change", function() {
